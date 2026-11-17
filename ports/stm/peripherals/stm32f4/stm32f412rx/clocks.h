@@ -8,11 +8,11 @@
 
 #include "stm32f4xx_hal.h"
 
-// Chip:                STM32F412
+// Chip:                STM32F412Rx
 // Line Type:           Access Line
-// Speed:               200MHz (MAX)
+// Speed:               100MHz (MAX)
 
-// Note - uses the I2S PLL for SUSB to enable full 100MHz operation, since USB
+// Note - uses the I2S PLL for USB to enable full 100MHz operation, since USB
 // can't get the right divisors from 100MHz PLL settings.
 
 // Defaults:
