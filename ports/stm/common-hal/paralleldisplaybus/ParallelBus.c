@@ -80,6 +80,10 @@ void common_hal_paralleldisplaybus_parallelbus_construct_nonsequential(paralleld
             raise_ValueError_invalid_pin_name(MP_QSTR_read);
         }
     }
+    // A write takes DATAST + 3 HCLK cycles (MakeCode measured 72 ns for
+    // DATAST = 4 at 96 MHz). DATAST is at most 255, so the slowest write takes
+    // 258 cycles. Refuse a lower frequency rather than exceed it.
+    mp_arg_validate_int_min(frequency, (SystemCoreClock + 257) / 258, MP_QSTR_frequency);
 
     for (uint8_t i = 0; i < n_pins; i++) {
         fsmc_pin_init(data_periphs[i]);
@@ -92,10 +96,10 @@ void common_hal_paralleldisplaybus_parallelbus_construct_nonsequential(paralleld
     }
     self->read = read;
 
-    // A write takes DATAST + 3 HCLK cycles (MakeCode measured 72 ns for
-    // DATAST = 4 at 96 MHz). Use the shortest that stays within frequency.
+    // Use the shortest write that stays within frequency: at most 258 cycles,
+    // so DATAST fits.
     uint32_t cycles = (SystemCoreClock + frequency - 1) / frequency;
-    uint32_t datast = MIN(MAX(cycles, 4) - 3, 255);
+    uint32_t datast = MAX(cycles, 4) - 3;
 
     __HAL_RCC_FSMC_CLK_ENABLE();
     // 8-bit SRAM with writes enabled and separate write timing. The write FIFO
