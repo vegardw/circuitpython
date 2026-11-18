@@ -80,9 +80,10 @@ void common_hal_paralleldisplaybus_parallelbus_construct_nonsequential(paralleld
             raise_ValueError_invalid_pin_name(MP_QSTR_read);
         }
     }
-    // A write takes DATAST + 3 HCLK cycles (MakeCode measured 72 ns for
-    // DATAST = 4 at 96 MHz). DATAST is at most 255, so the slowest write takes
-    // 258 cycles. Refuse a lower frequency rather than exceed it.
+    // A write takes DATAST + 3 HCLK cycles (codal-stm32, used by MakeCode
+    // Arcade, gives 72 ns for DATAST = 4 at 96 MHz). DATAST is at most 255, so
+    // the slowest write takes 258 cycles. Refuse a lower frequency rather than
+    // exceed it.
     mp_arg_validate_int_min(frequency, (SystemCoreClock + 257) / 258, MP_QSTR_frequency);
 
     for (uint8_t i = 0; i < n_pins; i++) {
@@ -104,9 +105,11 @@ void common_hal_paralleldisplaybus_parallelbus_construct_nonsequential(paralleld
     __HAL_RCC_FSMC_CLK_ENABLE();
     // 8-bit SRAM with writes enabled and separate write timing. The write FIFO
     // is off so each byte is on the bus before command/data or chip select
-    // changes. 0x80 keeps a reserved bit at its reset value.
+    // changes. 0x80 keeps a reserved bit at its reset value. These are the
+    // values of codal-stm32's FSMC driver, used by MakeCode Arcade, except
+    // DATAST, which comes from frequency.
     FSMC_Bank1->BTCR[0] = FSMC_BCR1_EXTMOD | FSMC_BCR1_WREN | FSMC_BCR1_WFDIS | 0x80;
-    FSMC_Bank1->BTCR[1] = 0x112419; // Read timing, as MakeCode uses
+    FSMC_Bank1->BTCR[1] = 0x112419; // Read timing
     FSMC_Bank1E->BWTR[0] = 0x0ff00010 | (datast << FSMC_BWTR1_DATAST_Pos);
     FSMC_Bank1->BTCR[0] |= FSMC_BCR1_MBKEN;
 
