@@ -121,6 +121,13 @@ void common_hal_paralleldisplaybus_parallelbus_construct_nonsequential(paralleld
 }
 
 void common_hal_paralleldisplaybus_parallelbus_deinit(paralleldisplaybus_parallelbus_obj_t *self) {
+    // The bus lives in a display bus slot, which is deinited even if construct
+    // raised. write is set only once every check passed, so guard on it:
+    // otherwise this would turn off the FSMC bank under another display.
+    if (self->write == NULL) {
+        return;
+    }
+
     FSMC_Bank1->BTCR[0] &= ~FSMC_BCR1_MBKEN;
 
     for (uint8_t i = 0; i < MP_ARRAY_SIZE(self->data_pins); i++) {
