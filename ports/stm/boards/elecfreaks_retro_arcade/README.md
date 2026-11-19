@@ -14,7 +14,8 @@ Most of the port is already in CircuitPython's `main`: the STM32F412Rx MCU varia
 [uf2-stm32f bootloader](https://github.com/mmoskal/uf2-stm32f)
 ([#11903](https://github.com/adafruit/circuitpython/pull/11903)) and the FSMC parallel display
 bus ([#11908](https://github.com/adafruit/circuitpython/pull/11908)). This branch is `main` plus
-this board definition, which waits for a USB allocation before it can be submitted upstream.
+this board definition, which is open upstream as draft
+[#11915](https://github.com/adafruit/circuitpython/pull/11915) while it waits for a USB allocation.
 
 ## Current scope
 
@@ -36,8 +37,7 @@ this board definition, which waits for a USB allocation before it can be submitt
   for the whole library; copy other modules to `CIRCUITPY/lib` as `.mpy` when a game needs them.
   The frozen modules come before `/lib` in `sys.path`, so a newer copy of one of them only takes
   effect in the CIRCUITPY root, not in `/lib`. To make room, `bitbangio`, `gifio`, `jpegio`, `pulseio`, `usb_midi`, `atexit`, `getpass`,
-  `locale` and `warnings` are left out. This is specific to this branch; the upstream board PR
-  doesn't freeze the helpers.
+  `locale` and `warnings` are left out. The upstream board PR does the same in its second commit.
 - picogame's helpers know this board: its button helper picks the board's profile by itself
   (the D-pad, A, B, and MENU as START), so no `settings.toml` line is needed. To steer by
   tilting as well, add this line to `settings.toml` on CIRCUITPY:
