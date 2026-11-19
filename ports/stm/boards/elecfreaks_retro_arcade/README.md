@@ -29,24 +29,24 @@ this board definition, which waits for a USB allocation before it can be submitt
   more heap for pixel buffers: an 8-row strip buffer is a useful starting point on this board.
 - 18 of picogame's Python helper modules are frozen into the firmware, so games can use them
   without copying anything: the base, text and UI, sound, gameplay, art and accelerometer
-  helpers from [picogame-libs](https://github.com/MakerClassCZ/picogame-libs) 0.3.3, its
+  helpers from [picogame-libs](https://github.com/MakerClassCZ/picogame-libs) 0.3.4, its
   `frozen/core` folder made for this (list in
-  [its README](https://github.com/MakerClassCZ/picogame-libs/blob/0.3.3/frozen/core/README.md)),
+  [its README](https://github.com/MakerClassCZ/picogame-libs/blob/0.3.4/frozen/core/README.md)),
   pinned by the `frozen/picogame-libs` submodule. CIRCUITPY is too small
   for the whole library; copy other modules to `CIRCUITPY/lib` as `.mpy` when a game needs them.
   The frozen modules come before `/lib` in `sys.path`, so a newer copy of one of them only takes
   effect in the CIRCUITPY root, not in `/lib`. To make room, `bitbangio`, `gifio`, `jpegio`, `pulseio`, `usb_midi`, `atexit`, `getpass`,
   `locale` and `warnings` are left out. This is specific to this branch; the upstream board PR
   doesn't freeze the helpers.
-- picogame's button helper doesn't know this board yet. Add this line to `settings.toml` on
-  CIRCUITPY:
+- picogame's helpers know this board: its button helper picks the board's profile by itself
+  (the D-pad, A, B, and MENU as START), so no `settings.toml` line is needed. To steer by
+  tilting as well, add this line to `settings.toml` on CIRCUITPY:
 
   ```toml
-  PICOGAME_BUTTONS = "UP=BUTTON_UP DOWN=BUTTON_DOWN LEFT=BUTTON_LEFT RIGHT=BUTTON_RIGHT A=BUTTON_A B=BUTTON_B START=BUTTON_MENU"
+  PICOGAME_TILTPAD = "retro_arcade"
   ```
 
-  To steer by tilting as well, add `PICOGAME_TILTPAD = "lis3dh invy=1"`. The accelerometer
-  zeroes at start, so hold the console the way you play when a game starts.
+  The accelerometer zeroes at start, so hold the console the way you play when a game starts.
 - Audio uses `main`'s `audiopwmio`, which includes the fix for the hang on silent sources
   ([#11889](https://github.com/adafruit/circuitpython/pull/11889)). Audio playback hasn't been
   validated on this branch.
@@ -85,7 +85,10 @@ REPL and CIRCUITPY storage, resets and both ways into the bootloader, the displa
 display's colours and orientation, rendering in both Stage and Picogame, I2C and ADC, all buttons,
 vibration and PWM tones. The original bootloader stayed unchanged. With the frozen helpers:
 boot, a picogame game (Picotris) using only the frozen modules, with sound effects, and tilt
-steering in all four directions. Audio playback beyond those sound effects hasn't been validated.
+steering in all four directions. The board's button profile and `retro_arcade` tilt preset, new
+in picogame-libs 0.3.4, were tested on the device before that release: all seven buttons with no
+`settings.toml` line, tilt in all four directions, and a picogame game played with both. Audio
+playback beyond those sound effects hasn't been validated.
 
 The firmware's primary licence is MIT; see the repository's [LICENSE](../../../../LICENSE)
 and individual file notices for upstream and third-party terms. The request concerns an
