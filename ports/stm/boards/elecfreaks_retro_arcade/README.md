@@ -29,8 +29,10 @@ this board definition, which waits for a USB allocation before it can be submitt
   more heap for pixel buffers: an 8-row strip buffer is a useful starting point on this board.
 - 18 of picogame's Python helper modules are frozen into the firmware, so games can use them
   without copying anything: the base, text and UI, sound, gameplay, art and accelerometer
-  helpers from [picogame-libs](https://github.com/MakerClassCZ/picogame-libs) 0.3.2 (list in
-  [frozen/picogame-core](../../../../frozen/picogame-core/README.md)). CIRCUITPY is too small
+  helpers from [picogame-libs](https://github.com/MakerClassCZ/picogame-libs) 0.3.3, its
+  `frozen/core` folder made for this (list in
+  [its README](https://github.com/MakerClassCZ/picogame-libs/blob/0.3.3/frozen/core/README.md)),
+  pinned by the `frozen/picogame-libs` submodule. CIRCUITPY is too small
   for the whole library; copy other modules to `CIRCUITPY/lib` as `.mpy` when a game needs them.
   The frozen modules come before `/lib` in `sys.path`, so a newer copy of one of them only takes
   effect in the CIRCUITPY root, not in `/lib`. To make room, `bitbangio`, `gifio`, `jpegio`, `pulseio`, `usb_midi`, `atexit`, `getpass`,
