@@ -53,3 +53,17 @@ FROZEN_MPY_DIRS += $(TOP)/frozen/circuitpython-stage/elecfreaks_retro_arcade
 
 # Native picogame renderer alongside Stage; use the generic parallel-display path.
 CIRCUITPY_PICOGAME = 1
+
+# This branch only: picogame helpers frozen into the firmware, since CIRCUITPY (32K) can't hold
+# them; see frozen/picogame-core/README.md.
+FROZEN_MPY_DIRS += $(TOP)/frozen/picogame-core
+# Room for them: modules a game console doesn't need.
+CIRCUITPY_BITBANGIO = 0
+CIRCUITPY_GIFIO = 0
+CIRCUITPY_JPEGIO = 0
+CIRCUITPY_PULSEIO = 0
+CIRCUITPY_USB_MIDI = 0
+CIRCUITPY_ATEXIT = 0
+CIRCUITPY_GETPASS = 0
+CIRCUITPY_LOCALE = 0
+CIRCUITPY_WARNINGS = 0
