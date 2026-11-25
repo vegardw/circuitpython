@@ -93,12 +93,12 @@ copy a MakeCode `.uf2` to `ARCADE-F4` the same way; that replaces CircuitPython 
 
 ## Verification and licence
 
-The branch is Adafruit `main` (last merged at `d6be0e7b39`) plus this board definition, with
+The branch is Adafruit `main` (last merged at `7d4ca58b48`) plus this board definition, with
 Stage pinned at `11db3fbb52`. With the frozen picogame helpers, the build leaves about 35 KiB of
 firmware flash free; pixel and audio buffers additionally use heap.
 
-Tested on the device on 2026-11-19, with this `main` and the same board and display code: boot,
-USB REPL and CIRCUITPY storage, resets and both ways into the bootloader, the display bus and the
+Tested on the device on 2026-11-19, with `main` at `d6be0e7b39` and the same board and display
+code: boot, USB REPL and CIRCUITPY storage, resets and both ways into the bootloader, the display bus and the
 display's colours and orientation, rendering in both Stage and Picogame, I2C and ADC, all buttons,
 vibration and PWM tones. Flash readbacks in earlier runs showed the original bootloader
 unchanged. With the frozen helpers:
@@ -106,7 +106,8 @@ boot, a picogame game (Picotris) using only the frozen modules, with sound effec
 steering in all four directions. The board's button profile and `retro_arcade` tilt preset, new
 in picogame-libs 0.3.4, were tested on the device before that release: all seven buttons with no
 `settings.toml` line, tilt in all four directions, and a picogame game played with both. Audio
-playback beyond those sound effects hasn't been validated.
+playback beyond those sound effects hasn't been validated. The merge of `main` at `7d4ca58b48`,
+which brings two STM RTC fixes, has been built but not yet run on the device.
 
 The firmware's primary licence is MIT; see the repository's [LICENSE](../../../../LICENSE)
 and individual file notices for upstream and third-party terms.
