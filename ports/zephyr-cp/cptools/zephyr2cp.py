@@ -38,6 +38,7 @@ SOC_NAMES = {
 MANUAL_COMPAT_TO_DRIVER = {
     "renesas_ra_nv_flash": "flash",
     "soc_nv_flash": "flash",
+    "jedec_nor": "flash",
     "nordic_nrf_uarte": "serial",
     "nordic_nrf_uart": "serial",
     "nordic_nrf_twim": "i2c",
@@ -1146,6 +1147,9 @@ def zephyr_dts_to_cp_board(board_id, portdir, builddir, zephyrbuilddir, mpconfig
                 if driver not in active_zephyr_devices:
                     active_zephyr_devices[driver] = []
                 active_zephyr_devices[driver].append(node.labels)
+            elif driver == "input":
+                board_info["zephyr_input"] = True
+                logger.info("Supported Zephyr input device: %s", underscored)
             elif driver in EXCEPTIONAL_DRIVERS:
                 pass
             elif driver in BUSIO_CLASSES:

@@ -97,6 +97,7 @@ REVERSE_DEPENDENCIES = {
         "audiofreeverb",
         "audiomixer",
         "audiomp3",
+        "audiotap",
         "synthio",
     ],
     "busio": ["fourwire", "i2cdisplaybus", "sdcardio", "sharpdisplay"],
@@ -693,6 +694,12 @@ async def build_circuitpython():  # noqa: C901
         circuitpython_flags.extend(
             (
                 "-isystem",
+                portdir / "modules" / "crypto" / "tf-psa-crypto" / "dispatch" / "include",
+            )
+        )
+        circuitpython_flags.extend(
+            (
+                "-isystem",
                 portdir
                 / "modules"
                 / "crypto"
@@ -765,7 +772,7 @@ async def build_circuitpython():  # noqa: C901
                         or s.parent.name == backend_dir
                         or (s.parent.name == "legacy" and s.name == "__init__.c")
                     ]
-                if module.name in ("busdisplay", "framebufferio"):
+                if module.name in ("busdisplay", "epaperdisplay", "framebufferio"):
                     # These have legacy scanline implementations and LVGL ones.
                     backend_dir = "lvgl" if lvgl_enabled else "legacy"
                     backend_root = top / "shared-module" / module.name
